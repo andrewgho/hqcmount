@@ -7,6 +7,8 @@ cam_length = 38;
 cam_width = 38;
 thickness = 3;
 
+include <bubble.scad>
+
 e = 0.1;
 e2 = e * 2;
 $fn = 120;
@@ -184,12 +186,15 @@ difference() {
     translate([(pi_length - cam_length) / 2, (pi_width - cam_width) / 2, 0]) cam_plate();
 }
 
-// The plate that mounts to the camera (rotate 90 degrees so print lines line up)
-translate([cam_length + (pi_length - cam_length) / 2, pi_width, 0]) {
-  rotate(90, [0, 0, 1])
+// The plate that mounts to the camera
+translate([(pi_length - cam_length) / 2, pi_width, 0]) {
   difference() {
     cam_plate();
     translate([0, 0, thickness * (3/2)]) mirror([0, 0, 1])
       translate([-(pi_length - cam_length) / 2, -(pi_width - cam_width) / 2, 0]) pi_plate();
   }
+  translate([(cam_length - (bl_length + (2 * bl_thickness))) / 4, cam_width, 0])
+    mirror([0, 0, 1])
+    rotate(-90, [1, 0, 0])
+    bubble_level();
 }
